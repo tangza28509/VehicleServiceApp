@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#102a43">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Vehicle Service">
+  <meta name="description" content="จัดเก็บข้อมูลรถยนต์และประวัติการเข้ารับบริการ">
+  <link rel="manifest" href="./manifest.json">
+  <link rel="apple-touch-icon" href="./icons/icon-192.png">
+  <link rel="stylesheet" href="./styles.css">
+  <title>Vehicle Service</title>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand"><div class="brand-icon">🚘</div><div><b>Vehicle Service</b><small>ดูแลรถของคุณในที่เดียว</small></div></div>
+    <span class="offline" id="connection">พร้อมใช้งาน</span>
+  </header>
+
+  <main>
+    <section class="page active" id="home">
+      <div class="hero">
+        <p class="eyebrow">ยินดีต้อนรับ</p>
+        <h1>สวัสดี 👋</h1>
+        <p>จัดการข้อมูลรถและติดตามการดูแลรถของคุณได้ง่าย ๆ</p>
+      </div>
+      <div class="section-heading"><h2>รถยนต์ของฉัน</h2><button class="text-button" data-go="cars">จัดการ</button></div>
+      <div id="homeCars" class="cards"></div>
+      <div class="section-heading"><h2>ประวัติการเข้ารับบริการ</h2><button class="text-button" data-go="records">ดูทั้งหมด</button></div>
+      <div id="homeRecords" class="cards"></div>
+    </section>
+
+    <section class="page" id="cars">
+      <div class="page-title"><p class="eyebrow">MY GARAGE</p><h1>ข้อมูลรถยนต์</h1><p>เพิ่มและแก้ไขข้อมูลรถของคุณ</p></div>
+      <form id="carForm" class="panel">
+        <input type="hidden" id="carId">
+        <label>เลขทะเบียน<input id="plate" required placeholder="เช่น กข 1234"></label>
+        <div class="two-col">
+          <label>ยี่ห้อ<input id="brand" required placeholder="Toyota"></label>
+          <label>รุ่น<input id="model" required placeholder="Yaris"></label>
+        </div>
+        <label>เลขไมล์ (กม.)<input id="mileage" type="number" min="0" inputmode="numeric" placeholder="เช่น 45000"></label>
+        <div class="form-actions"><button class="primary" type="submit">บันทึกข้อมูลรถ</button><button class="secondary" type="button" id="cancelCar">ล้างฟอร์ม</button></div>
+      </form>
+      <div id="carList" class="cards"></div>
+    </section>
+
+    <section class="page" id="records">
+      <div class="page-title"><p class="eyebrow">SERVICE HISTORY</p><h1>ประวัติการบริการ</h1><p>บันทึกการซ่อมบำรุงและค่าใช้จ่าย</p></div>
+      <form id="recordForm" class="panel">
+        <label>รถยนต์<select id="recordCar" required></select></label>
+        <div class="two-col">
+          <label>วันที่<input id="recordDate" type="date" required></label>
+          <label>เลขไมล์<input id="recordMileage" type="number" min="0" inputmode="numeric" placeholder="กม."></label>
+        </div>
+        <label>รายการบริการ<input id="recordTitle" required placeholder="เช่น เปลี่ยนน้ำมันเครื่อง"></label>
+        <label>ค่าใช้จ่าย (บาท)<input id="recordCost" type="number" min="0" inputmode="decimal" placeholder="0"></label>
+        <label>หมายเหตุ<textarea id="recordNote" rows="2" placeholder="รายละเอียดเพิ่มเติม (ถ้ามี)"></textarea></label>
+        <button class="primary full" type="submit">เพิ่มประวัติบริการ</button>
+      </form>
+      <div id="recordList" class="cards"></div>
+    </section>
+
+    <section class="page" id="profile">
+      <div class="page-title"><p class="eyebrow">YOUR ACCOUNT</p><h1>บัญชีผู้ใช้</h1><p>ข้อมูลส่วนตัวและการจัดเก็บ</p></div>
+      <form id="profileForm" class="panel">
+        <label>ชื่อผู้ใช้<input id="profileName" placeholder="ชื่อของคุณ"></label>
+        <label>เบอร์โทรศัพท์<input id="profilePhone" type="tel" inputmode="tel" placeholder="08xxxxxxxx"></label>
+        <button class="primary full" type="submit">บันทึกโปรไฟล์</button>
+      </form>
+      <div class="panel privacy"><b>🔒 ความเป็นส่วนตัว</b><p>ข้อมูลรถ ประวัติบริการ และโปรไฟล์จัดเก็บในเบราว์เซอร์ของอุปกรณ์นี้ ยังไม่มีระบบซิงก์หรือสำรองข้อมูลออนไลน์</p></div>
+      <button id="exportData" class="secondary full">ส่งออกข้อมูลสำรอง (JSON)</button>
+      <button id="importButton" class="secondary full">นำเข้าข้อมูลสำรอง</button>
+      <input type="file" id="importFile" accept="application/json" hidden>
+    </section>
+  </main>
+
+  <nav class="tabbar" aria-label="เมนูหลัก">
+    <button class="tab active" data-go="home"><span>⌂</span>หน้าแรก</button>
+    <button class="tab" data-go="cars"><span>🚗</span>รถยนต์</button>
+    <button class="tab" data-go="records"><span>🧾</span>บริการ</button>
+    <button class="tab" data-go="profile"><span>♙</span>บัญชี</button>
+  </nav>
+  <div id="toast" role="status" aria-live="polite"></div>
+  <script src="./app.js"></script>
+</body>
+</html>
